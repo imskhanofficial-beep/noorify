@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sadulla — Computer Operator & Data Management</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --paper: #f5f0e8;
+    --cream: #ede7d9;
+    --accent: #c8622a;
+    --accent2: #2a6bc8;
+    --muted: #7a7368;
+    --card: #ffffff;
+    --border: #ddd7cc;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1.1rem 5vw;
+    background: rgba(245,240,232,0.92);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 900; font-size: 1.3rem; color: var(--ink);
+    letter-spacing: -0.03em;
+  }
+  .nav-logo span { color: var(--accent); }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--muted); font-size: 0.875rem;
+    font-weight: 500; letter-spacing: 0.04em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    padding: 7rem 5vw 4rem;
+    gap: 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  #hero::before {
+    content: '';
+    position: absolute; top: -10%; right: -5%;
+    width: 55vw; height: 55vw; max-width: 700px; max-height: 700px;
+    background: radial-gradient(circle, #e8d5c0 0%, transparent 70%);
+    border-radius: 50%;
+    z-index: 0;
+  }
+  .hero-text { position: relative; z-index: 1; }
+  .hero-eyebrow {
+    font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 1rem;
+  }
+  .hero-name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 900; line-height: 1.05;
+    letter-spacing: -0.03em; color: var(--ink);
+    margin-bottom: 1.2rem;
+  }
+  .hero-name em { color: var(--accent); font-style: normal; }
+  .hero-tagline {
+    font-size: 1.05rem; color: var(--muted); max-width: 420px;
+    font-weight: 300; margin-bottom: 2.5rem; line-height: 1.8;
+  }
+  .hero-cta-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    display: inline-block; padding: 0.75rem 1.8rem;
+    text-decoration: none; font-size: 0.875rem; font-weight: 500;
+    letter-spacing: 0.04em; border-radius: 2px; transition: all 0.2s;
+    cursor: pointer; border: none;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #a84d1f; transform: translateY(-2px); }
+  .btn-outline { background: transparent; color: var(--ink); border: 1.5px solid var(--border); }
+  .btn-outline:hover { border-color: var(--ink); transform: translateY(-2px); }
+
+  .hero-photo-wrap { position: relative; z-index: 1; display: flex; justify-content: center; }
+  .photo-frame {
+    width: 320px; height: 380px;
+    background: var(--cream);
+    border: 2px solid var(--border);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.8rem; color: var(--muted); font-size: 0.85rem;
+    position: relative;
+    box-shadow: 8px 8px 0 var(--accent);
+  }
+  .photo-frame svg { opacity: 0.35; }
+  .photo-frame .photo-hint { font-size: 0.75rem; text-align: center; padding: 0 1.5rem; line-height: 1.6; }
+
+  /* ── SECTIONS ── */
+  section { padding: 5rem 5vw; }
+  section:nth-child(even) { background: var(--cream); }
+
+  .section-label {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--accent); font-weight: 500; margin-bottom: 0.5rem;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 3rem; color: var(--ink);
+    max-width: 600px;
+  }
+
+  .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+
+  /* ── ABOUT ── */
+  .about-body { font-size: 1rem; color: var(--muted); line-height: 1.9; }
+  .about-body p + p { margin-top: 1rem; }
+  .about-stats { display: flex; flex-direction: column; gap: 1.5rem; }
+  .stat-item { border-left: 3px solid var(--accent); padding-left: 1.2rem; }
+  .stat-num {
+    font-family: 'Playfair Display', serif; font-size: 2.5rem;
+    font-weight: 900; color: var(--ink); line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; }
+  .personal-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+  .chip {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 0.3rem 0.9rem; border-radius: 100px;
+    font-size: 0.78rem; color: var(--muted);
+  }
+
+  /* ── SKILLS ── */
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 1.5rem; }
+  .skill-card {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 1.6rem; border-radius: 2px;
+    position: relative; overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .skill-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+  .skill-card::before {
+    content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%;
+    background: var(--accent);
+  }
+  .skill-icon { font-size: 1.5rem; margin-bottom: 0.8rem; }
+  .skill-name { font-weight: 500; font-size: 1rem; color: var(--ink); margin-bottom: 0.4rem; }
+  .skill-desc { font-size: 0.82rem; color: var(--muted); line-height: 1.6; }
+  .skill-bar-wrap { margin-top: 0.9rem; background: var(--cream); height: 3px; border-radius: 2px; }
+  .skill-bar { height: 100%; background: var(--accent); border-radius: 2px; }
+
+  /* ── EXPERIENCE ── */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .timeline-item { position: relative; margin-bottom: 3rem; }
+  .timeline-dot {
+    position: absolute; left: -2.45rem; top: 0.3rem;
+    width: 12px; height: 12px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--paper);
+  }
+  .timeline-date { font-size: 0.78rem; color: var(--accent); font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 0.4rem; }
+  .timeline-role { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; color: var(--ink); }
+  .timeline-company { font-size: 0.9rem; color: var(--muted); margin-bottom: 1rem; }
+  .timeline-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .timeline-bullets li {
+    font-size: 0.9rem; color: var(--muted); padding-left: 1.2rem; position: relative; line-height: 1.7;
+  }
+  .timeline-bullets li::before { content: '→'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
+
+  /* ── PROJECTS ── */
+  .projects-note { font-size: 0.85rem; color: var(--muted); margin-bottom: 2.5rem; font-style: italic; }
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.5rem; }
+  .project-card {
+    background: var(--card); border: 1px solid var(--border); padding: 2rem;
+    display: flex; flex-direction: column; gap: 0.8rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+  .project-tag {
+    display: inline-block; background: var(--cream);
+    font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--accent); padding: 0.2rem 0.6rem; font-weight: 500; align-self: flex-start;
+  }
+  .project-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; color: var(--ink); }
+  .project-desc { font-size: 0.85rem; color: var(--muted); line-height: 1.7; flex: 1; }
+  .project-link {
+    display: inline-flex; align-items: center; gap: 0.4rem;
+    font-size: 0.8rem; color: var(--accent2); text-decoration: none;
+    font-weight: 500; margin-top: 0.5rem;
+    border-bottom: 1px solid transparent; transition: border-color 0.2s;
+  }
+  .project-link:hover { border-color: var(--accent2); }
+
+  /* ── CONTACT ── */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+  .contact-intro { font-size: 1rem; color: var(--muted); line-height: 1.9; margin-bottom: 2rem; }
+  .contact-list { display: flex; flex-direction: column; gap: 1.2rem; }
+  .contact-item { display: flex; align-items: flex-start; gap: 1rem; }
+  .contact-icon { font-size: 1.1rem; margin-top: 0.1rem; }
+  .contact-info-label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--muted); margin-bottom: 0.1rem; }
+  .contact-info-val { font-size: 0.95rem; color: var(--ink); font-weight: 500; }
+  .contact-info-val a { color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--border); }
+  .contact-info-val a:hover { color: var(--accent); border-color: var(--accent); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-group label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
+  .form-group input,
+  .form-group textarea {
+    background: var(--card); border: 1px solid var(--border);
+    padding: 0.75rem 1rem; font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem; color: var(--ink); outline: none;
+    border-radius: 2px; transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus { border-color: var(--accent); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--ink); color: var(--cream);
+    text-align: center; padding: 2.5rem 5vw;
+    font-size: 0.8rem;
+  }
+  footer a { color: var(--accent); text-decoration: none; }
+
+  /* ── HAMBURGER ── */
+  .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+  .hamburger span { display: block; width: 22px; height: 2px; background: var(--ink); transition: all 0.3s; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 768px) {
+    nav { padding: 1rem 5vw; }
+    .nav-links { display: none; flex-direction: column; gap: 1.5rem; position: absolute; top: 100%; left: 0; right: 0; background: var(--paper); padding: 2rem 5vw; border-bottom: 1px solid var(--border); }
+    .nav-links.open { display: flex; }
+    .hamburger { display: flex; }
+
+    #hero { grid-template-columns: 1fr; text-align: center; padding-top: 6rem; }
+    .hero-tagline { margin: 0 auto 2.5rem; }
+    .hero-cta-row { justify-content: center; }
+    .hero-photo-wrap { order: -1; }
+    .photo-frame { width: 220px; height: 260px; }
+    #hero::before { display: none; }
+
+    .content-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .contact-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .skills-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">S<span>.</span>Khan</div>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#about">About</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-text">
+    <p class="hero-eyebrow">Computer Operator &amp; Data Management</p>
+    <h1 class="hero-name">Sadulla<br/><em>Khan</em></h1>
+    <p class="hero-tagline">4 years of keeping data clean, systems running, and offices organised. Based in Delhi — ready to contribute to your team from day one.</p>
+    <div class="hero-cta-row">
+      <a href="#contact" class="btn btn-primary">Get in Touch</a>
+      <a href="#experience" class="btn btn-outline">View Experience</a>
+    </div>
+  </div>
+  <div class="hero-photo-wrap">
+    <div class="photo-frame">
+      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      <p class="photo-hint">Replace this block with your photo.<br/>Recommended: 400×480 px portrait.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label">Who I am</p>
+  <h2 class="section-title">A reliable operator with a sharp eye for detail.</h2>
+  <div class="content-grid">
+    <div class="about-body">
+      <p>I'm Sadulla, a Computer Operator based in Ashok Vihar, Delhi. Over four years at ONNZ Group I handled end-to-end data operations — from database management and bookkeeping in Tally Prime to administrative support and basic IT troubleshooting.</p>
+      <p>I work with accuracy first, speed second. Whether it's a data-entry backlog or a filing system that's fallen apart, I get things orderly, fast, and keep them that way.</p>
+      <p>I'm currently looking for my next role where I can grow into broader operations or accounts functions.</p>
+      <div class="personal-chips">
+        <span class="chip">📍 Delhi, India</span>
+        <span class="chip">🗣 Hindi &amp; English</span>
+        <span class="chip">♟ Chess</span>
+        <span class="chip">📚 Self-Improvement</span>
+        <span class="chip">DOB: 3 May 2002</span>
+      </div>
+    </div>
+    <div class="about-stats">
+      <div class="stat-item">
+        <div class="stat-num">4</div>
+        <div class="stat-label">Years of Experience</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">1</div>
+        <div class="stat-label">Company — ONNZ Group</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Core Skill Areas</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label">What I bring</p>
+  <h2 class="section-title">Skills &amp; Competencies</h2>
+  <div class="skills-grid">
+
+    <div class="skill-card">
+      <div class="skill-icon">📊</div>
+      <div class="skill-name">Tally Prime</div>
+      <div class="skill-desc">Financial data entry, bookkeeping, inventory tracking, and account ledger management.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:90%"></div></div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">💻</div>
+      <div class="skill-name">MS Office Suite</div>
+      <div class="skill-desc">Word, Excel, and PowerPoint for reports, data sheets, and business documentation.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:85%"></div></div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">⌨️</div>
+      <div class="skill-name">Data Entry</div>
+      <div class="skill-desc">High-speed, high-accuracy data processing with focus on consistency and error-free output.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:92%"></div></div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">🗂️</div>
+      <div class="skill-name">Documentation</div>
+      <div class="skill-desc">Creating, maintaining, and organising company records, reports, and filing systems.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:88%"></div></div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">🛠️</div>
+      <div class="skill-name">Technical Support</div>
+      <div class="skill-desc">Basic system troubleshooting, resolving hardware/software issues for office operations.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:70%"></div></div>
+    </div>
+
+    <div class="skill-card">
+      <div class="skill-icon">🤝</div>
+      <div class="skill-name">Customer Service</div>
+      <div class="skill-desc">Professional handling of inquiries and issue resolution with clear communication.</div>
+      <div class="skill-bar-wrap"><div class="skill-bar" style="width:75%"></div></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <p class="section-label">Work History</p>
+  <h2 class="section-title">Professional Experience</h2>
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <p class="timeline-date">2019 – 2023</p>
+      <h3 class="timeline-role">Computer Operator</h3>
+      <p class="timeline-company">ONNZ Group · Delhi, India</p>
+      <ul class="timeline-bullets">
+        <li>Managed day-to-day computer operations, ensuring timely and accurate task completion across departments.</li>
+        <li>Organised and updated company databases with strong focus on data accuracy, integrity, and security.</li>
+        <li>Provided first-line technical support and resolved system-related issues to minimise downtime.</li>
+        <li>Supported team operations by streamlining administrative processes and maintaining organised records.</li>
+        <li>Handled financial data entry and bookkeeping using Tally Prime, including inventory tracking.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div style="margin-top:2rem;">
+    <p class="section-label">Education</p>
+    <div class="timeline" style="margin-top:1rem;">
+      <div class="timeline-item">
+        <div class="timeline-dot" style="background:var(--accent2)"></div>
+        <p class="timeline-date">2019</p>
+        <h3 class="timeline-role" style="font-size:1.1rem;">12th Grade — Commerce Stream</h3>
+        <p class="timeline-company">Govt. Boys Sr. Sec. School, Ashok Vihar, Delhi</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <p class="section-label">What I've built / done</p>
+  <h2 class="section-title">Projects &amp; Work Samples</h2>
+  <p class="projects-note">Replace these placeholders with real projects, spreadsheets, or reports you've created.</p>
+  <div class="projects-grid">
+
+    <div class="project-card">
+      <span class="project-tag">Tally Prime</span>
+      <h3 class="project-name">Inventory &amp; Bookkeeping System</h3>
+      <p class="project-desc">Maintained and structured a full inventory tracking and accounts ledger for ONNZ Group using Tally Prime over 4 years.</p>
+      <a href="#" class="project-link">→ Add link or PDF sample</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">Documentation</span>
+      <h3 class="project-name">Company Records Management</h3>
+      <p class="project-desc">Designed and maintained a structured filing and reporting system for internal company records and official documents.</p>
+      <a href="#" class="project-link">→ Add link or PDF sample</a>
+    </div>
+
+    <div class="project-card">
+      <span class="project-tag">MS Excel</span>
+      <h3 class="project-name">Data Reporting Spreadsheet</h3>
+      <p class="project-desc">Built and managed operational data sheets in Excel for tracking daily tasks, inventory, and administrative workflows.</p>
+      <a href="#" class="project-link">→ Add link or PDF sample</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label">Let's connect</p>
+  <h2 class="section-title">Get in Touch</h2>
+  <div class="contact-grid">
+    <div>
+      <p class="contact-intro">Open to full-time roles in data operations, accounts, or office administration. I respond to emails within 24 hours.</p>
+      <div class="contact-list">
+        <div class="contact-item">
+          <div class="contact-icon">📧</div>
+          <div>
+            <div class="contact-info-label">Email</div>
+            <div class="contact-info-val"><a href="mailto:imskhanofficial@gmail.com">imskhanofficial@gmail.com</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📞</div>
+          <div>
+            <div class="contact-info-label">Phone</div>
+            <div class="contact-info-val"><a href="tel:+918585949037">+91 85859 49037</a></div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">📍</div>
+          <div>
+            <div class="contact-info-label">Location</div>
+            <div class="contact-info-val">Ashok Vihar, Delhi – 110052</div>
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-icon">💼</div>
+          <div>
+            <div class="contact-info-label">LinkedIn</div>
+            <div class="contact-info-val"><a href="#">Add your LinkedIn URL here</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <form class="contact-form" onsubmit="handleSubmit(event)">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fname">First Name</label>
+          <input type="text" id="fname" placeholder="Rahul" />
+        </div>
+        <div class="form-group">
+          <label for="lname">Last Name</label>
+          <input type="text" id="lname" placeholder="Sharma" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">Email</label>
+        <input type="email" id="email" placeholder="rahul@company.com" />
+      </div>
+      <div class="form-group">
+        <label for="msg">Message</label>
+        <textarea id="msg" rows="5" placeholder="Hi Sadulla, I'd like to discuss a role..."></textarea>
+      </div>
+      <button type="submit" class="btn btn-primary" style="align-self:flex-start">Send Message →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2024 Sadulla Khan · Delhi, India · <a href="mailto:imskhanofficial@gmail.com">imskhanofficial@gmail.com</a></p>
+</footer>
+
+<script>
+  // Mobile nav
+  const hamburger = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+  hamburger.addEventListener('click', () => navLinks.classList.toggle('open'));
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => navLinks.classList.remove('open')));
+
+  // Smooth active nav highlight
+  const sections = document.querySelectorAll('section[id]');
+  const links = document.querySelectorAll('.nav-links a');
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.style.color = '');
+        const active = document.querySelector(`.nav-links a[href="#${e.target.id}"]`);
+        if (active) active.style.color = 'var(--accent)';
+      }
+    });
+  }, { threshold: 0.4 });
+  sections.forEach(s => obs.observe(s));
+
+  // Dummy form handler
+  function handleSubmit(e) {
+    e.preventDefault();
+    alert('Message sent! (Connect this to a backend or Formspree to make it live.)');
+  }
+</script>
+</body>
+</html>
